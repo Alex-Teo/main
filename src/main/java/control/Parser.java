@@ -20,6 +20,7 @@ import command.RejectCommand;
 import exception.DukeException;
 import storage.Constants;
 import java.io.IOException;
+import java.text.ParseException;
 
 /**
  * Parse input and execute respective user command.
@@ -32,7 +33,7 @@ public class Parser {
      * @return Command to be executed
      * @throws DukeException if user enters wrong input format
      */
-    public static Command parse(String input, boolean loginStatus) throws DukeException, IOException {
+    public static Command parse(String input, boolean loginStatus) throws DukeException, IOException, ParseException {
         String[] splitStr = input.split(" ");
         switch (splitStr[0]) {
         case "bye":

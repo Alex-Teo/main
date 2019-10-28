@@ -10,12 +10,14 @@ import user.User;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class ListBookingDailyCommand extends Command {
 
-    private LocalDate dateStart;
+    private int dateStart;
 
     /**
      * Show all bookings on a certain day.
@@ -23,14 +25,16 @@ public class ListBookingDailyCommand extends Command {
      * @param splitStr tokenized input
      * @throws DukeException when entry is invalid
      */
-    public ListBookingDailyCommand(String input, String[] splitStr) throws DukeException {
+    public ListBookingDailyCommand(String input, String[] splitStr) throws DukeException, ParseException {
         if (splitStr.length <= 1) {
             throw new DukeException("☹ OOPS!!! Please create your booking with the following format: "
                     + "date");
         }
         String date = input.substring(8);
         DateTimeFormatter formatterStart = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        this.dateStart = LocalDate.parse(date, formatterStart);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HHmm");
+        Date Start = sdf.parse(date);
+        this.dateStart = Start.getDate();
     }
 
 

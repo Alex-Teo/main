@@ -10,14 +10,16 @@ import user.User;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class ListBookingMonthCommand extends Command {
 
-    private LocalDate dateStart;
-    private Month monthStart;
+    private Date dateStart;
+    private int monthStart;
 
     /**
      * Show all bookings in a certain month.
@@ -25,14 +27,15 @@ public class ListBookingMonthCommand extends Command {
      * @param splitStr tokenized input
      * @throws DukeException when entry is ivalid due to format
      */
-    public ListBookingMonthCommand(String input, String[] splitStr) throws DukeException {
+    public ListBookingMonthCommand(String input, String[] splitStr) throws DukeException, ParseException {
         if (splitStr.length <= 1) {
             throw new DukeException("☹ OOPS!!! Please create your booking with the following format: "
                     + "date");
         }
         String stringDate = input.substring(10);
         DateTimeFormatter formatterStart = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        this.dateStart = LocalDate.parse(stringDate, formatterStart);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HHmm");
+        this.dateStart = sdf.parse(stringDate);
         this.monthStart = dateStart.getMonth();
     }
 

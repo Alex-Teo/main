@@ -1,5 +1,8 @@
 package booking;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.time.Month;
 import java.time.ZoneId;
 import java.time.Instant;
@@ -11,8 +14,8 @@ import java.time.temporal.ChronoField;
 
 public class Booking {
 
-    protected LocalDateTime dateTimeStart;
-    protected LocalDate dateStart;
+    protected Date dateTimeStart;
+    protected int dateStart;
     protected LocalTime timeEnd;
     protected String venue;
     protected String name;
@@ -21,19 +24,25 @@ public class Booking {
 
     /**
      * Facility.booking.Booking constructor to make booking
-     *
      * @param username      the requestor
      * @param roomcode      the specific room code
      * @param description   what you are going to use the room for
      * @param dateTimeStart when you are booking the facility
      * @param dateTimeEnd   when your booked period ends
      */
-    public Booking(String username, String roomcode, String description, String dateTimeStart, String dateTimeEnd) {
+    public Booking(String username, String roomcode, String description, String dateTimeStart, String dateTimeEnd) throws ParseException {
         this.venue = roomcode;
-        DateTimeFormatter formatterStart = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+        //DateTimeFormatter formatterStart = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HHmm");
         DateTimeFormatter formatterEnd = DateTimeFormatter.ofPattern("HHmm");
-        this.dateTimeStart = LocalDateTime.parse(dateTimeStart, formatterStart);
-        this.dateStart = this.dateTimeStart.toLocalDate();
+        try {
+            this.dateTimeStart = sdf.parse(dateTimeStart);
+        }
+        catch (ParseException e) {
+            System.out.println("Please enter date time format correctly: dd/mm/yyyy hhmm");
+        }
+        assert this.dateTimeStart != null;
+        this.dateStart = this.dateTimeStart.getDate();
         this.timeEnd = LocalTime.parse(dateTimeEnd, formatterEnd);
         this.description = description;
         this.name = username;
@@ -64,9 +73,9 @@ public class Booking {
     public Booking(String username, String roomcode, String description, String atStart, String atEnd, String status) {
         this.venue = roomcode;
         this.description = description;
-        Instant instantStart = Instant.ofEpochMilli(Long.parseLong(atStart));
+        //Instant instantStart = Instant.ofEpochMilli(Long.parseLong(atStart));
         Instant instantEnd = Instant.ofEpochMilli(Long.parseLong(atEnd));
-        this.dateTimeStart = instantStart.atZone(ZoneId.systemDefault()).toLocalDateTime();
+        this.dateTimeStart = new Date(Long.parseLong(atStart));
         this.timeEnd = instantEnd.atZone(ZoneId.systemDefault()).toLocalTime();
         this.name = username;
         this.status = status;
@@ -79,7 +88,7 @@ public class Booking {
     public String toString() {
         DateTimeFormatter formatterStart = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
         DateTimeFormatter formatterEnd = DateTimeFormatter.ofPattern("HHmm");
-        return name + " " + venue + " " + dateTimeStart.format(formatterStart) + " to "
+        return name + " " + venue + " " + dateTimeStart.toString() + " to "
                 + timeEnd.format(formatterEnd) + " " +  status;
     }
 
@@ -89,11 +98,11 @@ public class Booking {
      */
     public String toWriteFile() {
         return this.name + " | " + this.venue + " | " + this.description + " | "
-                + this.dateTimeStart.getLong(ChronoField.EPOCH_DAY) + " | "
+                + this.dateTimeStart.getTime() + " | "
                 + this.timeEnd.getLong(ChronoField.MINUTE_OF_HOUR) + " | " + this.status + "\n";
     }
 
-    public LocalDateTime getDateTimeStart() {
+    public Date getDateTimeStart() {
         return this.dateTimeStart;
     }
 
@@ -121,12 +130,12 @@ public class Booking {
         return status;
     }
 
-    public LocalDate getDateStart() {
+    public int getDateStart() {
         return dateStart;
     }
 
-    public Month getStartMonth() {
-        return dateStart.getMonth();
+    public int getStartMonth() {
+        return dateTimeStart.getMonth();
     }
 
 

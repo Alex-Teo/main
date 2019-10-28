@@ -11,15 +11,17 @@ import user.User;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class RejectCommand extends Command {
 
     private String name;
     private String[] splitC;
     private String roomcode;
-    private LocalDateTime dateTimeStart;
+    private Date dateTimeStart;
     private String datetimeStartString;
 
     //@@author Alex-Teo
@@ -49,7 +51,8 @@ public class RejectCommand extends Command {
         }
         datetimeStartString = splitC[3] + " " + splitC[4];
         DateTimeFormatter formatterStart = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-        this.dateTimeStart = LocalDateTime.parse(datetimeStartString, formatterStart);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HHmm");
+        this.dateTimeStart = sdf.parse(datetimeStartString);
         for (Booking i: bookingList) {
             if ((i.getVenue() == roomcode) && (i.getDateTimeStart() == dateTimeStart) && (i.getName() == name)) {
                 i.setStatus("R");

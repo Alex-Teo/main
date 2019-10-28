@@ -11,14 +11,16 @@ import user.User;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class FindBookingCommand extends Command {
     private String name;
     private String[] splitC;
     private String roomcode;
-    private LocalDateTime dateTimeStart;
+    private Date dateTimeStart;
     private String datetimeStartString;
 
     //@@author Alex-Teo
@@ -29,7 +31,7 @@ public class FindBookingCommand extends Command {
      * @throws DukeException format error
      * @throws IOException entry error
      */
-    public FindBookingCommand(String input, String[] splitStr) throws DukeException, IOException {
+    public FindBookingCommand(String input, String[] splitStr) throws DukeException, IOException, ParseException {
         if (splitStr.length <= 1) {
             throw new DukeException("☹ OOPS!!! Please create the booking you want to edit with the following format: "
                     + "name, roomcode, start date and time");
@@ -39,7 +41,8 @@ public class FindBookingCommand extends Command {
         roomcode = splitC[2];
         datetimeStartString = splitC[3] + " " + splitC[4];
         DateTimeFormatter formatterStart = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-        this.dateTimeStart = LocalDateTime.parse(datetimeStartString, formatterStart);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HHmm");
+        this.dateTimeStart = sdf.parse(datetimeStartString);
     }
 
     @Override

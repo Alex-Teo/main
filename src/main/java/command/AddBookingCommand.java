@@ -34,7 +34,7 @@ public class AddBookingCommand extends Command {
      * @throws DukeException if format not followed
      * @throws IOException when entry is incorrect
      */
-    public AddBookingCommand(String input, String[] splitStr) throws DukeException, IOException {
+    public AddBookingCommand(String input, String[] splitStr) throws DukeException, IOException, ParseException {
         if (splitStr.length <= 8) {
             throw new DukeException("☹ OOPS!!! Please create your booking with the following format: "
                    + "name, description, roomcode, date and time");
